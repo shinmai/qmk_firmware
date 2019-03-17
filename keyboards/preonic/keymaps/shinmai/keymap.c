@@ -164,21 +164,21 @@ TD(LSCD),  KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,     KC_CO
 
 /* Hyper
  * ,-----------------------------------------------------------------------------------.
- * |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |  F7  |   7  |   8  |  9   |  *   |      |
+ * |MEHRIO|      |      |      |      |      |      |      |      |      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      | Reset|      |      |      |      |      |   4  |   5  |  6   |  -   |      |
+ * |      |      |      |      |      |      |      |      |      |      |      |      |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * |      |      |      |Aud on|AudOff|      |      |   1  |   2  |  3   |  +   |      |
+ * |      |      |      |      |      |      | Left | Down |  Up  |Right |      |      |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
- * |      |Voice-|Voice+|Mus on|MusOff|MidiOn|MidOff|   0  |   ,  |  /   |Enter |      |
+ * |      |      |      |      |      |      |      |      |      |      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |  m1  |  m2  |  m3  |  m4  |      |             |      |      |      |      |      |
+ * |      |      |      |      |      |      |      |      |      |      |      |      |
  * `-----------------------------------------------------------------------------------'
  */
 [_HYPER] = LAYOUT_preonic_grid( \
   MUS4,    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
-  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+  _______, _______, _______, _______, _______, _______, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______, _______, \
   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______  \
 )
@@ -300,25 +300,21 @@ static tap rstap_state = {
 void ls_finished (qk_tap_dance_state_t *state, void *user_data) {
   lstap_state.state = cur_dance(state);
   switch (lstap_state.state) {
-    case SINGLE_TAP: register_code16(KC_LPRN); break;
+    case SINGLE_TAP: register_mods(MOD_BIT(KC_LSHIFT));register_code(KC_8); break;
     case SINGLE_HOLD: register_code(KC_LSHIFT); break;
-    case DOUBLE_TAP: register_code16(KC_LCBR); break;
-    case TRIPLE_TAP: 
-      SEND_STRING("<>| ' äöÄÖ lol");
-      /*PLAY_SONG(m4);*/ break; //register_code16(KC_LABK); break;
-    //case DOUBLE_HOLD: register_code(KC_LALT); break;
-    case DOUBLE_SINGLE_TAP: register_code16(KC_LPRN); unregister_code16(KC_LPRN); register_code16(KC_LPRN);
+    case DOUBLE_TAP: register_mods(MOD_BIT(KC_RALT));register_code(KC_7); break;
+    case TRIPLE_TAP: register_mods(MOD_BIT(KC_RALT));register_code(KC_8); break;
+    case DOUBLE_SINGLE_TAP: register_mods(MOD_BIT(KC_LSHIFT));register_code(KC_8);unregister_code(KC_8);register_code(KC_8);
   }
 }
 
 void ls_reset (qk_tap_dance_state_t *state, void *user_data) {
   switch (lstap_state.state) {
-    case SINGLE_TAP: unregister_code16(KC_LPRN); break;
+    case SINGLE_TAP: unregister_code(KC_8);unregister_mods(MOD_BIT(KC_LSHIFT)); break;
     case SINGLE_HOLD: unregister_code(KC_LSHIFT); break;
-    case DOUBLE_TAP: unregister_code16(KC_LCBR); break;
-    case TRIPLE_TAP: break; // unregister_code16(KC_LABK); break;
-    //case DOUBLE_HOLD: unregister_code(KC_LALT);
-    case DOUBLE_SINGLE_TAP: unregister_code16(KC_LPRN);
+    case DOUBLE_TAP: unregister_code(KC_7);unregister_mods(MOD_BIT(KC_RALT)); break;
+    case TRIPLE_TAP: unregister_code(KC_8);unregister_mods(MOD_BIT(KC_RALT)); break;
+    case DOUBLE_SINGLE_TAP: unregister_code(KC_8);unregister_mods(MOD_BIT(KC_LSHIFT));
   }
   lstap_state.state = 0;
 }
@@ -326,23 +322,21 @@ void ls_reset (qk_tap_dance_state_t *state, void *user_data) {
 void rs_finished (qk_tap_dance_state_t *state, void *user_data) {
   rstap_state.state = cur_dance(state);
   switch (rstap_state.state) {
-    case SINGLE_TAP: register_code16(KC_RPRN); break;
-    case SINGLE_HOLD: register_code(KC_RSHIFT); break;
-    case DOUBLE_TAP: register_code16(KC_RCBR); break;
-    case TRIPLE_TAP: register_code16(KC_RABK); break;
-    //case DOUBLE_HOLD: register_code(KC_LALT); break;
-    case DOUBLE_SINGLE_TAP: register_code16(KC_RPRN); unregister_code16(KC_RPRN); register_code16(KC_RPRN);
+    case SINGLE_TAP: register_mods(MOD_BIT(KC_LSHIFT));register_code(KC_9); break;
+    case SINGLE_HOLD: register_code(KC_LSHIFT); break;
+    case DOUBLE_TAP: register_mods(MOD_BIT(KC_RALT));register_code(KC_0); break;
+    case TRIPLE_TAP: register_mods(MOD_BIT(KC_RALT));register_code(KC_9); break;
+    case DOUBLE_SINGLE_TAP: register_mods(MOD_BIT(KC_LSHIFT));register_code(KC_9);unregister_code(KC_9);register_code(KC_9);
   }
 }
 
 void rs_reset (qk_tap_dance_state_t *state, void *user_data) {
   switch (rstap_state.state) {
-    case SINGLE_TAP: unregister_code16(KC_RPRN); break;
-    case SINGLE_HOLD: unregister_code(KC_RSHIFT); break;
-    case DOUBLE_TAP: unregister_code16(KC_RCBR); break;
-    case TRIPLE_TAP: unregister_code16(KC_RABK); break;
-    //case DOUBLE_HOLD: unregister_code(KC_LALT);
-    case DOUBLE_SINGLE_TAP: unregister_code16(KC_RPRN);
+    case SINGLE_TAP: unregister_code(KC_9);unregister_mods(MOD_BIT(KC_LSHIFT)); break;
+    case SINGLE_HOLD: unregister_code(KC_LSHIFT); break;
+    case DOUBLE_TAP: unregister_code(KC_0);unregister_mods(MOD_BIT(KC_RALT)); break;
+    case TRIPLE_TAP: unregister_code(KC_9);unregister_mods(MOD_BIT(KC_RALT)); break;
+    case DOUBLE_SINGLE_TAP: unregister_code(KC_9);unregister_mods(MOD_BIT(KC_LSHIFT));
   }
   rstap_state.state = 0;
 }
