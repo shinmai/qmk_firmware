@@ -18,6 +18,7 @@
 #define NO_AUTO_SHIFT_SPECIAL
 //#define RETRO_TAPPING
 #define TAPPING_TERM 200
+#define LEADER_TIMEOUT 1500
 /*
  * MIDI options
  */
