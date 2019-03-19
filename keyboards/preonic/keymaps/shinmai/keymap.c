@@ -20,7 +20,6 @@ bspace repeat
 reverse umlaut and enter?
 */
 #include QMK_KEYBOARD_H
-#include "muse.h"
 
 enum preonic_layers {
   _QWERTY,
@@ -33,23 +32,19 @@ enum preonic_layers {
 
 enum preonic_keycodes {
   QWERTY = SAFE_RANGE,
-  MUS1, MUS2, MUS3, MUS4,
+  MUS1,
 };
 
 bool did_leader_succeed;
-#ifdef AUDIO_ENABLE
 float m1[][2] = SONG(PLOVER_GOODBYE_SOUND);
-float m2[][2] = SONG(SONIC_RING);
 float m3[][2] = SONG(COIN_SOUND);
 float m4[][2] = SONG(MARIO_MUSHROOM);
 float leader_startt[][2] = SONG(ONE_UP_SOUND );
-#endif
 LEADER_EXTERNS();
 
 #define LSPRSE LT(_RAISE, KC_SPC)
 #define RSPLWR LT(_LOWER, KC_SPC)
 #define LFTSPR LT(_SUPER, KC_LEFT)
-//#define HYPER LT(_HYPER, KC_LEAD)
 #define HYPER MO(_HYPER)
 
 typedef struct {
@@ -78,7 +73,6 @@ enum {
   HPRLD,
   ZABRC,
 };
-
 int cur_dance (qk_tap_dance_state_t *state);
 
 void ls_finished (qk_tap_dance_state_t *state, void *user_data);
@@ -158,15 +152,15 @@ KC_RBRC ¨
 
 /* Adjust (Lower + Raise)
  * ,-----------------------------------------------------------------------------------.
- * |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |  F7  |   7  |   8  |  9   |  *   |      |
+ * | Reset|      |      |      |      |      |      |   7  |   8  |  9   |  *   |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      | Reset|      |      |      |      |      |   4  |   5  |  6   |  -   |      |
+ * |      |      |      |      |      |      |      |   4  |   5  |  6   |  -   |      |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * |      |      |      |Aud on|AudOff|      |      |   1  |   2  |  3   |  +   |      |
+ * |      |      |      |      |      |      |      |   1  |   2  |  3   |  +   |      |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
- * |      |Voice-|Voice+|Mus on|MusOff|MidiOn|MidOff|   0  |   ,  |  /   |Enter |      |
+ * |      |      |      |      |      |      |      |   0  |   ,  |  /   |Enter |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |  m1  |  m2  |  m3  |  m4  |      |             |      | Next | Vol- | Vol+ | Play |
+ * |  m1  |      |      |      |      |      |      |      | Next | Vol- | Vol+ | Play |
  * `-----------------------------------------------------------------------------------'
  */
 [_ADJUST] = LAYOUT_preonic_grid( \
@@ -174,7 +168,7 @@ KC_RBRC ¨
   _______, _______, _______, _______, _______, _______, _______, KC_P4,   KC_P5,   KC_P6,   KC_PMNS, _______, \
   _______, _______, _______, _______, _______, _______, _______, KC_P1,   KC_P2,   KC_P3,   KC_PPLS, _______, \
   _______, _______, _______, _______, _______, _______, _______, KC_P0,   KC_PDOT, KC_PSLS, KC_PENT, _______, \
-  MUS1,    MUS2,    MUS3,    MUS4,    _______, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY  \
+  MUS1,    _______, _______, _______, _______, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY  \
 ),
 
 /* Hyper
@@ -191,7 +185,7 @@ KC_RBRC ¨
  * `-----------------------------------------------------------------------------------'
  */
 [_HYPER] = LAYOUT_preonic_grid( \
-  MUS4,    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+  MUS1,    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
   _______, _______, _______, _______, _______, _______, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______, _______, \
   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
@@ -228,18 +222,6 @@ uint32_t layer_state_set_user(uint32_t state) {
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case MUS1:
-      PLAY_SONG(m1);
-      return false;
-      break;
-    case MUS2:
-      PLAY_SONG(m2);
-      return false;
-      break;
-    case MUS3:
-      PLAY_SONG(m3);
-      return false;
-      break;
-    case MUS4:
       PLAY_SONG(m4);
       return false;
       break;
@@ -247,29 +229,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   return true;
 };
 
-bool muse_mode = false;
-uint8_t last_muse_note = 0;
-uint16_t muse_counter = 0;
-uint8_t muse_offset = 70;
-uint16_t muse_tempo = 50;
-
 void matrix_scan_user(void) {
-  if (muse_mode) {
-    if (muse_counter == 0) {
-      uint8_t muse_note = muse_offset + SCALE[muse_clock_pulse()];
-      if (muse_note != last_muse_note) {
-        stop_note(compute_freq_for_midi_note(last_muse_note));
-        play_note(compute_freq_for_midi_note(muse_note), 0xF);
-        last_muse_note = muse_note;
-      }
-    }
-    muse_counter = (muse_counter + 1) % muse_tempo;
-  }
   LEADER_DICTIONARY() {
     did_leader_succeed = leading = false;
 
     SEQ_ONE_KEY(KC_E) {
-      // Anything you can do in a macro.
       SEND_STRING("eka");
       did_leader_succeed = true;
     } else 
@@ -290,16 +254,6 @@ void leader_end(void) {
     PLAY_SONG(m3);
   } else {
     PLAY_SONG(m1);
-  }
-}
-
-bool music_mask_user(uint16_t keycode) {
-  switch (keycode) {
-    case LSPRSE:
-    case RSPLWR:
-      return false;
-    default:
-      return true;
   }
 }
 
@@ -325,22 +279,14 @@ int cur_dance (qk_tap_dance_state_t *state) {
   else return 8;
 }
 
-static tap lstap_state = {
-  .is_press_action = true,
-  .state = 0
-};
-static tap rstap_state = {
-  .is_press_action = true,
-  .state = 0
-};
-static tap hltap_state = {
+static tap tap_state = {
   .is_press_action = true,
   .state = 0
 };
 
 void ls_finished (qk_tap_dance_state_t *state, void *user_data) {
-  lstap_state.state = cur_dance(state);
-  switch (lstap_state.state) {
+  tap_state.state = cur_dance(state);
+  switch (tap_state.state) {
     case SINGLE_TAP: register_mods(MOD_BIT(KC_LSHIFT));register_code(KC_8); break;
     case SINGLE_HOLD: register_code(KC_LSHIFT); break;
     case DOUBLE_TAP: register_mods(MOD_BIT(KC_RALT));register_code(KC_7); break;
@@ -350,19 +296,19 @@ void ls_finished (qk_tap_dance_state_t *state, void *user_data) {
 }
 
 void ls_reset (qk_tap_dance_state_t *state, void *user_data) {
-  switch (lstap_state.state) {
+  switch (tap_state.state) {
     case SINGLE_TAP: unregister_code(KC_8);unregister_mods(MOD_BIT(KC_LSHIFT)); break;
     case SINGLE_HOLD: unregister_code(KC_LSHIFT); break;
     case DOUBLE_TAP: unregister_code(KC_7);unregister_mods(MOD_BIT(KC_RALT)); break;
     case TRIPLE_TAP: unregister_code(KC_8);unregister_mods(MOD_BIT(KC_RALT)); break;
     case DOUBLE_SINGLE_TAP: unregister_code(KC_8);unregister_mods(MOD_BIT(KC_LSHIFT));
   }
-  lstap_state.state = 0;
+  tap_state.state = 0;
 }
 
 void rs_finished (qk_tap_dance_state_t *state, void *user_data) {
-  rstap_state.state = cur_dance(state);
-  switch (rstap_state.state) {
+  tap_state.state = cur_dance(state);
+  switch (tap_state.state) {
     case SINGLE_TAP: register_mods(MOD_BIT(KC_LSHIFT));register_code(KC_9); break;
     case SINGLE_HOLD: register_code(KC_LSHIFT); break;
     case DOUBLE_TAP: register_mods(MOD_BIT(KC_RALT));register_code(KC_0); break;
@@ -372,14 +318,14 @@ void rs_finished (qk_tap_dance_state_t *state, void *user_data) {
 }
 
 void rs_reset (qk_tap_dance_state_t *state, void *user_data) {
-  switch (rstap_state.state) {
+  switch (tap_state.state) {
     case SINGLE_TAP: unregister_code(KC_9);unregister_mods(MOD_BIT(KC_LSHIFT)); break;
     case SINGLE_HOLD: unregister_code(KC_LSHIFT); break;
     case DOUBLE_TAP: unregister_code(KC_0);unregister_mods(MOD_BIT(KC_RALT)); break;
     case TRIPLE_TAP: unregister_code(KC_9);unregister_mods(MOD_BIT(KC_RALT)); break;
     case DOUBLE_SINGLE_TAP: unregister_code(KC_9);unregister_mods(MOD_BIT(KC_LSHIFT));
   }
-  rstap_state.state = 0;
+  tap_state.state = 0;
 }
 
 void bs_taphandler (qk_tap_dance_state_t *state, void *user_data) {
@@ -389,10 +335,9 @@ void bs_taphandler (qk_tap_dance_state_t *state, void *user_data) {
   }
 }
 
-
 void hyperlead_finished (qk_tap_dance_state_t *state, void *user_data) {
-  hltap_state.state = cur_dance(state);
-  switch (hltap_state.state) {
+  tap_state.state = cur_dance(state);
+  switch (tap_state.state) {
     case SINGLE_TAP:
       qk_leader_start();
       break;
@@ -403,11 +348,12 @@ void hyperlead_finished (qk_tap_dance_state_t *state, void *user_data) {
 }
 
 void hyperlead_reset (qk_tap_dance_state_t *state, void *user_data) {
-  switch (hltap_state.state) {
+  switch (tap_state.state) {
     case SINGLE_HOLD:
       layer_off(_HYPER);
       break;
   }
+  tap_state.state = 0;
 }
 
 qk_tap_dance_action_t tap_dance_actions[] = {
