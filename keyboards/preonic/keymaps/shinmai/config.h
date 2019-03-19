@@ -14,11 +14,11 @@
 #endif
 
 #define MUSIC_MASK (keycode != KC_NO)
-#define AUTO_SHIFT_TIMEOUT 150
+#define AUTO_SHIFT_TIMEOUT 165
 #define NO_AUTO_SHIFT_SPECIAL
 //#define RETRO_TAPPING
-#define TAPPING_TERM 200
-#define LEADER_TIMEOUT 1500
+#define TAPPING_TERM 175
+#define LEADER_TIMEOUT 350
 /*
  * MIDI options
  */
