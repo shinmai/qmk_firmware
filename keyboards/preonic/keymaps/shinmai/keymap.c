@@ -1,24 +1,3 @@
-/*
-TODO:
- XXX obackspace - ctrlbSP
- XXX numpad
- XXX shifts
- XXX ö '
- XXX ä enter
- XXX ctrl LeftBottom, super, alt, gui
- XXX arrows PgUpDn endHome
- XXX deL > +
- XXX | tilde
-gui menu
-del to bs handler
-
-Figure out:
-numberrow?
-
-Bugs:
-bspace repeat
-reverse umlaut and enter?
-*/
 #include QMK_KEYBOARD_H
 
 enum preonic_layers {
