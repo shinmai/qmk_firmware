@@ -413,12 +413,11 @@ void hyperlead_reset (qk_tap_dance_state_t *state, void *user_data) {
 qk_tap_dance_action_t tap_dance_actions[] = {
   [LSCD]     = ACTION_TAP_DANCE_FN_ADVANCED(NULL,ls_finished, ls_reset),
   [RSCD]     = ACTION_TAP_DANCE_FN_ADVANCED(NULL,rs_finished, rs_reset),
-  [HPRLD]     = ACTION_TAP_DANCE_FN_ADVANCED(NULL,hyperlead_finished, hyperlead_reset),
+  [HPRLD]    = ACTION_TAP_DANCE_FN_ADVANCED(NULL,hyperlead_finished, hyperlead_reset),
   [BSPTD]    = ACTION_TAP_DANCE_FN_ADVANCED_TIME(bs_taphandler, NULL, NULL, 120), 
-  [GRCL]     = ACTION_TAP_DANCE_DOUBLE(KC_GRV, KC_CALCULATOR),
+  [GRCL]     = ACTION_TAP_DANCE_DOUBLE(KC_GRV,  KC_CALCULATOR),
   [AUMENT]   = ACTION_TAP_DANCE_DOUBLE(KC_QUOT, KC_ENT),
   [OUMAST]   = ACTION_TAP_DANCE_DOUBLE(KC_SCLN, KC_BSLS),
-  [DELPL]    = ACTION_TAP_DANCE_DOUBLE(KC_DEL, KC_MINS),
-  [ZABRC]    = ACTION_TAP_DANCE_DOUBLE(KC_Z, KC_NUBS),
-
+  [DELPL]    = ACTION_TAP_DANCE_DOUBLE(KC_DEL,  KC_MINS),
+  [ZABRC]    = ACTION_TAP_DANCE_DOUBLE(KC_Z,    KC_NUBS),
 };
