@@ -1,4 +1,6 @@
 #include QMK_KEYBOARD_H
+#include <ctype.h>
+#include <string.h>
 
 enum preonic_layers {
   _QWERTY,
@@ -62,11 +64,129 @@ void rs_finished (qk_tap_dance_state_t *state, void *user_data);
 void rs_reset (qk_tap_dance_state_t *state, void *user_data);
 void bs_taphandler (qk_tap_dance_state_t *state, void *user_data);
 
+void send_unicode_hex_string(const char* str);
+
+/* use X(n) to call the  */
+#ifdef UNICODEMAP_ENABLE
+enum unicode_name {
+  THINK, // thinking face 🤔
+  GRIN, // grinning face 😊
+  SMRK, // smirk 😏
+  WEARY, // good shit 😩
+  UNAMU, // unamused 😒
+
+  SNEK, // snke 🐍
+  PENGUIN, // 🐧
+  DRAGON, // 🐉
+  MONKEY, // 🐒
+  CHICK, // 🐥
+  BOAR, // 🐗
+
+  OKOK, // 👌
+  EFFU, // 🖕
+  INUP, // 👆
+  THUP, // 👍
+  THDN, // 👎
+
+  BBB, // dat B 🅱
+  POO, // poop 💩
+  HUNDR, // 100 💯
+  EGGPL, // EGGPLANT 🍆
+  WATER, // wet 💦
+  TUMBLER, // 🥃
+
+  LIT, // fire 🔥
+  BANG, // ‽
+  IRONY, // ⸮
+  DEGREE // °
+};
+
+
+const uint32_t PROGMEM unicode_map[] = {
+  [THINK]     = 0x1F914,
+  [GRIN]      = 0x1F600,
+  [BBB]       = 0x1F171,
+  [POO]       = 0x1F4A9,
+  [HUNDR]     = 0x1F4AF,
+  [SMRK]      = 0x1F60F,
+  [WEARY]     = 0x1F629,
+  [EGGPL]     = 0x1F346,
+  [WATER]     = 0x1F4A6,
+  [LIT]       = 0x1F525,
+  [UNAMU]     = 0x1F612,
+  [SNEK]      = 0x1F40D,
+  [PENGUIN]   = 0x1F427,
+  [BOAR]      = 0x1F417,
+  [MONKEY]    = 0x1F412,
+  [CHICK]     = 0x1F425,
+  [DRAGON]    = 0x1F409,
+  [OKOK]      = 0x1F44C,
+  [EFFU]      = 0x1F595,
+  [INUP]      = 0x1F446,
+  [THDN]      = 0x1F44E,
+  [THUP]      = 0x1F44D,
+  [TUMBLER]   = 0x1F943,
+  [BANG]      = 0x0203D,
+  [IRONY]     = 0x02E2E,
+  [DEGREE]    = 0x000B0
+ };
+#endif // UNICODEMAP_ENABLE
+
+#ifdef UCIS_ENABLE
+const qk_ucis_symbol_t ucis_symbol_table[] = UCIS_TABLE(
+  UCIS_SYM("poop", 0x1F4A9), // 💩
+  UCIS_SYM("rofl", 0x1F923), // 🤣
+  UCIS_SYM("kiss", 0x1F619), // 😙
+  UCIS_SYM("lit", 0x1F525),  // 🔥
+  UCIS_SYM("b", 0x1F171),    // 🅱
+  UCIS_SYM("peen", 0x1F346) // 🍆
+);
+void qk_ucis_start_user(void) {
+  unicode_input_start();
+  // register_hex(0x2328);
+  register_hex(0x25B7);
+  unicode_input_finish();
+}
+void qk_ucis_symbol_fallback (void) {
+  // for (uint8_t i = 0; i < qk_ucis_state.count - 1; i++) {
+  //   uint8_t code = qk_ucis_state.codes[i];
+  //   register_code(code);
+  //   unregister_code(code);
+  //   wait_ms(UNICODE_TYPE_DELAY);
+  // }
+}
+#endif
+__attribute__((weak))
+void send_unicode_hex_string(const char* str) {
+  if (!str) { return; } // Safety net
+
+  while (*str) {
+    // Find the next code point (token) in the string
+    for (; *str == ' '; str++);
+    size_t n = strcspn(str, " "); // Length of the current token
+    char code_point[n+1];
+    strncpy(code_point, str, n);
+    code_point[n] = '\0'; // Make sure it's null-terminated
+
+    // Normalize the code point: make all hex digits lowercase
+    for (char *p = code_point; *p; p++) {
+      *p = tolower((unsigned char)*p);
+    }
+
+    // Send the code point as a Unicode input string
+    unicode_input_start();
+    send_string(code_point);
+    unicode_input_finish();
+
+    str += n; // Move to the first ' ' (or '\0') after the current token
+  }
+}
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Qwerty
  * ,-----------------------------------------------------------------------------------.
- * |   §  |      |      |      |      |      |      |      |      |      |      | Bksp |
+ * |   §  | TFLIP|      |      |      |      |      |      |      |      |      | Bksp |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * | Tab  |   Q  |   W  |   E  |   R  |   T  |   Y  |   U  |   I  |   O  |   P  | Del+ |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
@@ -78,7 +198,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = LAYOUT_preonic_1x2uC( \
-TD(GRCL),  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,    TD(BSPTD),  \
+TD(GRCL),  TFLIP,   _______, _______, _______, _______, _______, _______, _______, _______, _______,    TD(BSPTD),  \
   KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,       TD(DELPL),  \
   KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    TD(OUMAST), TD(AUMENT), \
 TD(LSCD), TD(ZABRC),KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,    TD(RSCD),   \
@@ -141,7 +261,7 @@ TD(LSCD), TD(ZABRC),KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COM
  * `-----------------------------------------------------------------------------------'
  */
 [_ADJUST] = LAYOUT_preonic_1x2uC( \
-  RESET,   _______, _______, _______, _______, _______, _______, KC_P7,   KC_P8,   KC_P9,   KC_PAST, _______, \
+  RESET,   UC_M_WC, _______, _______, _______, _______, _______, KC_P7,   KC_P8,   KC_P9,   KC_PAST, _______, \
   _______, _______, _______, _______, _______, _______, _______, KC_P4,   KC_P5,   KC_P6,   KC_PMNS, _______, \
   _______, _______, _______, _______, _______, _______, _______, KC_P1,   KC_P2,   KC_P3,   KC_PPLS, _______, \
   _______, _______, _______, _______, ADJUST,  _______, _______, KC_P0,   KC_PDOT, KC_PSLS, KC_PENT, _______, \
@@ -162,7 +282,7 @@ TD(LSCD), TD(ZABRC),KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COM
  * `-----------------------------------------------------------------------------------'
  */
 [_HYPER] = LAYOUT_preonic_1x2uC( \
-  MUS1,    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+  MUS1,    UCLEAD,  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
   _______, _______, _______, _______, _______, _______, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______, _______, \
   _______, _______, _______, _______, HYPERT,  _______, _______, _______, _______, _______, _______, _______, \
@@ -247,6 +367,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         SEND_STRING("ADJU");
       return false;
       break;
+    case TFLIP:
+      if (record->event.pressed)
+        send_unicode_hex_string("0028 30CE 0CA0 75CA 0CA0 0029 30CE 5F61 253B 2501 253B");
+      return false;
+      break;
+    case UCLEAD:
+      if (!record->event.pressed)
+        qk_ucis_start();
       return false;
       break;
   }
