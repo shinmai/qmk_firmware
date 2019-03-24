@@ -1,6 +1,6 @@
 EXTRAKEY_ENABLE = yes      # Audio control and System control(+450)
 TAP_DANCE_ENABLE=yes
-AUTO_SHIFT_ENABLE = yes
+AUTO_SHIFT_ENABLE = no
 LEADER_ENABLE = yes
 AUDIO_ENABLE = yes         # Audio output on port C6
 BOOTMAGIC_ENABLE = no      # Virtual DIP switch configuration(+1000)
