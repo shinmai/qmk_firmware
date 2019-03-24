@@ -10,9 +10,9 @@
 - [x] arrows PgUpDn endHome
 - [x] deL > +
 - [x] | tilde
+- [x] print screen to leader
 - [ ] gui menu
 - [ ] del to bs handler
-- [ ] print screen to leader
 
 ## Figure out:
 - [ ] number row?
