@@ -6,8 +6,7 @@
 #ifdef AUDIO_ENABLE
     #define STARTUP_SONG SONG(COLEMAK_SOUND)
 
-    #define DEFAULT_LAYER_SONGS { SONG(QWERTY_SOUND), \
-                                }
+    #define DEFAULT_LAYER_SONGS { SONG(QWERTY_SOUND) }
 #endif
 
 #define MUSIC_MASK (keycode != KC_NO)
