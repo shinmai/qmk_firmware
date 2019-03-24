@@ -12,7 +12,7 @@
 #define MUSIC_MASK (keycode != KC_NO)
 #define AUTO_SHIFT_TIMEOUT 165
 #define NO_AUTO_SHIFT_SPECIAL
-#define TAPPING_TERM 175
+#define TAPPING_TERM 136
 #define LEADER_TIMEOUT 350
 
 #endif // CONFIG_USER_H
