@@ -390,7 +390,7 @@ void matrix_scan_user(void) {
       did_leader_succeed = true;
     } else 
     SEQ_TWO_KEYS(KC_S, KC_S) {
-      SEND_STRING(SS_DOWN(X_LALT)SS_TAP(X_PSCREEN)SS_DOWN(X_LALT));
+      SEND_STRING(SS_DOWN(X_LALT)SS_TAP(X_PSCREEN)SS_UP(X_LALT));
       did_leader_succeed = true;
     }
     leader_end();
