@@ -30,11 +30,6 @@ LEADER_EXTERNS();
 #define LFTSPR LT(_SUPER, KC_LEFT)
 #define HYPER MO(_HYPER)
 
-typedef struct {
-  bool is_press_action;
-  int state;
-} tap;
-
 enum {
   SINGLE_TAP = 1,
   SINGLE_HOLD = 2,
@@ -431,14 +426,11 @@ int cur_dance (qk_tap_dance_state_t *state) {
   else return 8;
 }
 
-static tap tap_state = {
-  .is_press_action = true,
-  .state = 0
-};
+static int tap_state;
 
 void ls_finished (qk_tap_dance_state_t *state, void *user_data) {
-  tap_state.state = cur_dance(state);
-  switch (tap_state.state) {
+  tap_state = cur_dance(state);
+  switch (tap_state) {
     case SINGLE_TAP: register_mods(MOD_BIT(KC_LSHIFT));register_code(KC_8); break;
     case SINGLE_HOLD: register_code(KC_LSHIFT); break;
     case DOUBLE_TAP: register_mods(MOD_BIT(KC_RALT));register_code(KC_7); break;
@@ -448,19 +440,19 @@ void ls_finished (qk_tap_dance_state_t *state, void *user_data) {
 }
 
 void ls_reset (qk_tap_dance_state_t *state, void *user_data) {
-  switch (tap_state.state) {
+  switch (tap_state) {
     case SINGLE_TAP: unregister_code(KC_8);unregister_mods(MOD_BIT(KC_LSHIFT)); break;
     case SINGLE_HOLD: unregister_code(KC_LSHIFT); break;
     case DOUBLE_TAP: unregister_code(KC_7);unregister_mods(MOD_BIT(KC_RALT)); break;
     case TRIPLE_TAP: unregister_code(KC_8);unregister_mods(MOD_BIT(KC_RALT)); break;
     case DOUBLE_SINGLE_TAP: unregister_code(KC_8);unregister_mods(MOD_BIT(KC_LSHIFT));
   }
-  tap_state.state = 0;
+  tap_state = 0;
 }
 
 void rs_finished (qk_tap_dance_state_t *state, void *user_data) {
-  tap_state.state = cur_dance(state);
-  switch (tap_state.state) {
+  tap_state = cur_dance(state);
+  switch (tap_state) {
     case SINGLE_TAP: register_mods(MOD_BIT(KC_LSHIFT));register_code(KC_9); break;
     case SINGLE_HOLD: register_code(KC_LSHIFT); break;
     case DOUBLE_TAP: register_mods(MOD_BIT(KC_RALT));register_code(KC_0); break;
@@ -470,14 +462,14 @@ void rs_finished (qk_tap_dance_state_t *state, void *user_data) {
 }
 
 void rs_reset (qk_tap_dance_state_t *state, void *user_data) {
-  switch (tap_state.state) {
+  switch (tap_state) {
     case SINGLE_TAP: unregister_code(KC_9);unregister_mods(MOD_BIT(KC_LSHIFT)); break;
     case SINGLE_HOLD: unregister_code(KC_LSHIFT); break;
     case DOUBLE_TAP: unregister_code(KC_0);unregister_mods(MOD_BIT(KC_RALT)); break;
     case TRIPLE_TAP: unregister_code(KC_9);unregister_mods(MOD_BIT(KC_RALT)); break;
     case DOUBLE_SINGLE_TAP: unregister_code(KC_9);unregister_mods(MOD_BIT(KC_LSHIFT));
   }
-  tap_state.state = 0;
+  tap_state = 0;
 }
 
 void bs_taphandler (qk_tap_dance_state_t *state, void *user_data) {
@@ -488,8 +480,8 @@ void bs_taphandler (qk_tap_dance_state_t *state, void *user_data) {
 }
 
 void hyperlead_finished (qk_tap_dance_state_t *state, void *user_data) {
-  tap_state.state = cur_dance(state);
-  switch (tap_state.state) {
+  tap_state = cur_dance(state);
+  switch (tap_state) {
     case SINGLE_TAP:
       qk_leader_start();
       break;
@@ -500,12 +492,12 @@ void hyperlead_finished (qk_tap_dance_state_t *state, void *user_data) {
 }
 
 void hyperlead_reset (qk_tap_dance_state_t *state, void *user_data) {
-  switch (tap_state.state) {
+  switch (tap_state) {
     case SINGLE_HOLD:
       layer_off(_HYPER);
       break;
   }
-  tap_state.state = 0;
+  tap_state = 0;
 }
 
 qk_tap_dance_action_t tap_dance_actions[] = {
