@@ -12,7 +12,7 @@
 - [x] | tilde
 - [ ] gui menu
 - [ ] del to bs handler
-- [ ] print screen
+- [ ] print screen to leader
 
 ## Figure out:
 - [ ] number row?
