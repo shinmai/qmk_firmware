@@ -69,33 +69,28 @@ enum unicode_name {
   SMRK, // smirk 😏
   WEARY, // good shit 😩
   UNAMU, // unamused 😒
-
   SNEK, // snke 🐍
   PENGUIN, // 🐧
   DRAGON, // 🐉
   MONKEY, // 🐒
   CHICK, // 🐥
   BOAR, // 🐗
-
   OKOK, // 👌
   EFFU, // 🖕
   INUP, // 👆
   THUP, // 👍
   THDN, // 👎
-
   BBB, // dat B 🅱
   POO, // poop 💩
   HUNDR, // 100 💯
   EGGPL, // EGGPLANT 🍆
   WATER, // wet 💦
   TUMBLER, // 🥃
-
   LIT, // fire 🔥
   BANG, // ‽
   IRONY, // ⸮
   DEGREE // °
 };
-
 
 const uint32_t PROGMEM unicode_map[] = {
   [THINK]     = 0x1F914,
@@ -123,7 +118,7 @@ const uint32_t PROGMEM unicode_map[] = {
   [TUMBLER]   = 0x1F943,
   [BANG]      = 0x0203D,
   [IRONY]     = 0x02E2E,
-  [DEGREE]    = 0x000B0
+  [DEGREE]    = 0x000B0,
  };
 #endif // UNICODEMAP_ENABLE
 
@@ -151,6 +146,7 @@ void qk_ucis_symbol_fallback (void) {
   // }
 }
 #endif
+
 __attribute__((weak))
 void send_unicode_hex_string(const char* str) {
   if (!str) { return; } // Safety net
@@ -178,7 +174,6 @@ void send_unicode_hex_string(const char* str) {
 }
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-
 /* Qwerty
  * ,-----------------------------------------------------------------------------------.
  * |   §  | TFLIP|      |      |      |      |      |      |      |      |      | Bksp |
