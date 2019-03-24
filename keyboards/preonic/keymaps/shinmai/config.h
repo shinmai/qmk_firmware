@@ -5,8 +5,10 @@
 
 #ifdef AUDIO_ENABLE
     #define STARTUP_SONG SONG(COLEMAK_SOUND)
-
     #define DEFAULT_LAYER_SONGS { SONG(QWERTY_SOUND) }
+    #define LEADER_CHIME S__NOTE(_G6), M__NOTE(_REST, 2), E__NOTE(_A6),
+    #define LEADER_DONE SD_NOTE(_A6), S__NOTE(_REST), S__NOTE(_B6),
+    #define LEADER_FDUP S__NOTE(_A6), M__NOTE(_REST, 1), S__NOTE(_G6), M__NOTE(_REST, 1), S__NOTE(_F6), 
 #endif
 
 #define MUSIC_MASK (keycode != KC_NO)

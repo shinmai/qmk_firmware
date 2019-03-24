@@ -19,10 +19,10 @@ enum preonic_keycodes {
 };
 
 bool did_leader_succeed;
-float m1[][2] = SONG(PLOVER_GOODBYE_SOUND);
-float m3[][2] = SONG(COIN_SOUND);
-float m4[][2] = SONG(MARIO_MUSHROOM);
-float leader_startt[][2] = SONG(ONE_UP_SOUND );
+float mushroom_sfx[][2] = SONG(MARIO_MUSHROOM);
+float leader_chime[][2] = SONG(LEADER_CHIME);
+float leader_done[][2] = SONG(LEADER_DONE);
+float leader_fdup[][2] = SONG(LEADER_FDUP);
 LEADER_EXTERNS();
 
 #define LSPRSE LT(_RAISE, KC_SPC)
@@ -344,7 +344,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case MUS1:
       if (record->event.pressed)
-        PLAY_SONG(m4);
+        PLAY_SONG(mushroom_sfx);
       return false;
       break;
     case SUPERT:
@@ -398,14 +398,14 @@ void matrix_scan_user(void) {
 }
 
 void leader_start(void) {
-    PLAY_SONG(leader_startt);
+    PLAY_SONG(leader_chime);
 }
 
 void leader_end(void) {
   if (did_leader_succeed) {
-    PLAY_SONG(m3);
+    PLAY_SONG(leader_done);
   } else {
-    PLAY_SONG(m1);
+    PLAY_SONG(leader_fdup);
   }
 }
 
