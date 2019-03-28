@@ -12,8 +12,8 @@
 - [x] | tilde
 - [x] print screen to leader
 - [x] gui menu
+- [x] shrug, dissaproval 2 3
 - [ ] del to bs handler
-- [ ] shrug, dissaproval 2 3
 
 ## Figure out:
 - [ ] number row?

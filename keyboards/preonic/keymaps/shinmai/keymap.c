@@ -15,7 +15,8 @@ enum preonic_layers {
 enum preonic_keycodes {
   QWERTY = SAFE_RANGE,
   MUS1, SUPERT, HACKERT, HYPERT,
-  ADJUST, TFLIP, UCLEAD
+  ADJUST, TFLIP, UCLEAD,
+  SHRUG, DSPRV
 };
 
 bool did_leader_succeed;
@@ -198,7 +199,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = LAYOUT_preonic_1x2uC( \
-TD(GRCL),  TFLIP,   _______, _______, _______, _______, _______, _______, _______, _______, _______,    TD(BSPTD),  \
+TD(GRCL),  TFLIP,   SHRUG,   DSPRV,   _______, _______, _______, _______, _______, _______, _______,    TD(BSPTD),  \
   KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,       TD(DELPL),  \
   KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    TD(OUMAST), TD(AUMENT), \
 TD(LSCD), TD(ZABRC),KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,    TD(RSCD),   \
@@ -370,6 +371,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case TFLIP:
       if (record->event.pressed)
         send_unicode_hex_string("0028 30CE 0CA0 75CA 0CA0 0029 30CE 5F61 253B 2501 253B");
+      return false;
+      break;
+    case SHRUG:
+      if (record->event.pressed)
+        send_unicode_hex_string("00AF 005C 005F 0028 30C4 0029 005F 002F 00AF");
+      return false;
+      break;
+    case DSPRV:
+      if (record->event.pressed)
+        send_unicode_hex_string("0CA0 005F 0CA0");
       return false;
       break;
     case UCLEAD:
