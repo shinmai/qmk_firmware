@@ -13,6 +13,7 @@
 - [x] print screen to leader
 - [ ] gui menu
 - [ ] del to bs handler
+- [ ] shrug, dissaproval 2 3
 
 ## Figure out:
 - [ ] number row?
