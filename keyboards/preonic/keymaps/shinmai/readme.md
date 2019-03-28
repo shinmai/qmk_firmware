@@ -11,7 +11,7 @@
 - [x] deL > +
 - [x] | tilde
 - [x] print screen to leader
-- [ ] gui menu
+- [x] gui menu
 - [ ] del to bs handler
 - [ ] shrug, dissaproval 2 3
 

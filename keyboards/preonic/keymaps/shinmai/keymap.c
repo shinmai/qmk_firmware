@@ -50,6 +50,7 @@ enum {
   OUMAST,
   HPRLD,
   ZABRC,
+  GUIMN,
 };
 int cur_dance (qk_tap_dance_state_t *state);
 
@@ -201,7 +202,7 @@ TD(GRCL),  TFLIP,   _______, _______, _______, _______, _______, _______, ______
   KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,       TD(DELPL),  \
   KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    TD(OUMAST), TD(AUMENT), \
 TD(LSCD), TD(ZABRC),KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,    TD(RSCD),   \
- KC_LCTL, TD(HPRLD),KC_LALT, KC_LGUI, LSPRSE,        KC_SPC,     RSPLWR,  KC_LEFT, KC_DOWN, KC_UP,      KC_RGHT     \
+ KC_LCTL, TD(HPRLD),KC_LALT, GUIMN,   LSPRSE,        KC_SPC,     RSPLWR,  KC_LEFT, KC_DOWN, KC_UP,      KC_RGHT     \
 ),
 
 /* Lower
@@ -514,4 +515,5 @@ qk_tap_dance_action_t tap_dance_actions[] = {
   [OUMAST]   = ACTION_TAP_DANCE_DOUBLE(KC_SCLN, KC_BSLS),
   [DELPL]    = ACTION_TAP_DANCE_DOUBLE(KC_DEL,  KC_MINS),
   [ZABRC]    = ACTION_TAP_DANCE_DOUBLE(KC_Z,    KC_NUBS),
+  [GUIMN]    = ACTION_TAP_DANCE_DOUBLE(KC_LGUI, KC_APP),
 };
