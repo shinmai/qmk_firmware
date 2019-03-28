@@ -4,11 +4,11 @@
 #include "config_common.h"
 
 #ifdef AUDIO_ENABLE
-    #define MN(note) MUSICAL_NOTE(note, 1)
+    #define MN(note) {(NOTE##note), 1}
     #define SHINMAI_JINLGE \
     MN(_F7), MN(_A7), MN(_C8), MN(_A7), MN(_F7), MN(_A7), MN(_C8), MN(_A7), MN(_F7), MN(_A7), MN(_C8), MN(_A7), MN(_F7), MN(_A7), MN(_C8), MN(_A7), MN(_REST), \
     MN(_C7), MN(_E7), MN(_G7), MN(_B7), MN(_G7), MN(_E7), MN(_C7), MN(_E7), MN(_G7), MN(_B7), MN(_G7), MN(_E7), MN(_REST), \
-    MN(_D7), MN(_F7), MN(NOTE_A7), MN(_C8), MN(_A7), MN(_F7), MN(_D7), MN(_F7), MN(_A7), MN(_C8), MN(_A7), MN(_F7), MN(_D7), MN(_F7), MN(_A7), MN(_C8),
+    MN(_D7), MN(_F7), MN(_A7), MN(_C8), MN(_A7), MN(_F7), MN(_D7), MN(_F7), MN(_A7), MN(_C8), MN(_A7), MN(_F7), MN(_D7), MN(_F7), MN(_A7), MN(_C8),
     #define STARTUP_SONG SONG(SHINMAI_JINLGE)
     #define DEFAULT_LAYER_SONGS { SONG(QWERTY_SOUND) }
     #define LEADER_CHIME SD_NOTE(_A6), S__NOTE(_REST), S__NOTE(_A7),
