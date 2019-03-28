@@ -124,12 +124,21 @@ const uint32_t PROGMEM unicode_map[] = {
 
 #ifdef UCIS_ENABLE
 const qk_ucis_symbol_t ucis_symbol_table[] = UCIS_TABLE(
-  UCIS_SYM("poop", 0x1F4A9), // 💩
-  UCIS_SYM("rofl", 0x1F923), // 🤣
-  UCIS_SYM("kiss", 0x1F619), // 😙
-  UCIS_SYM("lit", 0x1F525),  // 🔥
-  UCIS_SYM("b", 0x1F171),    // 🅱
-  UCIS_SYM("peen", 0x1F346) // 🍆
+   UCIS_SYM("poop", 0x1F4A9) // 💩
+  ,UCIS_SYM("rofl", 0x1F923) // 🤣
+  ,UCIS_SYM("kiss", 0x1F619) // 😙
+  ,UCIS_SYM("lit",  0x1F525) // 🔥
+  ,UCIS_SYM("b",    0x1F171) // 🅱
+  ,UCIS_SYM("peen", 0x1F346) // 🍆
+  ,UCIS_SYM("hund", 0x1F4AF) // 💯
+  ,UCIS_SYM("snek", 0x1F40D) // 🐉
+  ,UCIS_SYM("ok",   0x1F44C) // 👌
+  ,UCIS_SYM("fu",   0x1F595) // 🖕
+  ,UCIS_SYM("joy",  0x1F602) // 😂
+  ,UCIS_SYM("cry",  0x1F62D) // 😭
+  ,UCIS_SYM("bang", 0x0203D) //  ‽
+  ,UCIS_SYM("irony",0x02E2E) //  ⸮
+  ,UCIS_SYM("check", 0x2714) // ✔️
 );
 void qk_ucis_start_user(void) {
   unicode_input_start();
