@@ -34,7 +34,7 @@ LEADER_EXTERNS();
 #define LFTSPR LT(_SUPER, KC_LEFT)
 #define HYPER MO(_HYPER)
 
-enum {
+enum tapstates {
   SINGLE_TAP = 1,
   SINGLE_HOLD = 2,
   DOUBLE_TAP = 3,
@@ -44,7 +44,7 @@ enum {
   TRIPLE_HOLD = 7
 };
 
-enum {
+enum tapkeys {
   LSCD = 0,
   RSCD,
   GRCL,
