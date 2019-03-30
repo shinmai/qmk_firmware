@@ -490,8 +490,8 @@ void rs_reset (qk_tap_dance_state_t *state, void *user_data) {
 
 void bs_taphandler (qk_tap_dance_state_t *state, void *user_data) {
   switch (state->count) {
-    case 1: register_code(KC_BSPC);unregister_code(KC_BSPC); break;
-    case 2: register_mods(MOD_BIT(KC_LCTL));register_code(KC_BSPC);unregister_code(KC_BSPC);unregister_mods(MOD_BIT(KC_LCTL)); break;
+    case 1: tap_code(KC_BSPC);break;
+    case 2: register_mods(MOD_BIT(KC_LCTL));tap_code(KC_BSPC);unregister_mods(MOD_BIT(KC_LCTL)); break;
   }
 }
 
