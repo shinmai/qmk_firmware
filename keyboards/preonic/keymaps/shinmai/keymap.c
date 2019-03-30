@@ -147,18 +147,10 @@ const qk_ucis_symbol_t ucis_symbol_table[] = UCIS_TABLE(
 );
 void qk_ucis_start_user(void) {
   unicode_input_start();
-  // register_hex(0x2328);
   register_hex(0x25B7);
   unicode_input_finish();
 }
-void qk_ucis_symbol_fallback (void) {
-  // for (uint8_t i = 0; i < qk_ucis_state.count - 1; i++) {
-  //   uint8_t code = qk_ucis_state.codes[i];
-  //   register_code(code);
-  //   unregister_code(code);
-  //   wait_ms(UNICODE_TYPE_DELAY);
-  // }
-}
+void qk_ucis_symbol_fallback (void) {}
 #endif
 
 __attribute__((weak))
