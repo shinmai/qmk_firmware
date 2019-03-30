@@ -14,10 +14,11 @@
 - [x] gui menu
 - [x] shrug, dissaproval 2 3
 - [ ] del to bs handler
+- [ ] bspace repeat
 
 ## Figure out:
 - [ ] number row?
+- [ ] meme layer
 
 ## Bugsy things:
-- [ ] bspace repeat
-- [ ] reverse umlaut and enter?
+- [ ] holding Z
