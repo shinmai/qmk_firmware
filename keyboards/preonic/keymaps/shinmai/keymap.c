@@ -203,7 +203,7 @@ TD(GRCL),  TFLIP,   SHRUG,   DSPRV,   _______, _______, _______, _______, ______
   KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,       TD(DELPL),  \
   KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    TD(OUMAST), TD(AUMENT), \
 TD(LSCD), TD(ZABRC),KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,    TD(RSCD),   \
- KC_LCTL, TD(HPRLD),KC_LALT, GUIMN,   LSPRSE,        KC_SPC,     RSPLWR,  KC_LEFT, KC_DOWN, KC_UP,      KC_RGHT     \
+ KC_LCTL, TD(HPRLD),KC_LALT,TD(GUIMN),LSPRSE,        KC_SPC,     RSPLWR,  KC_LEFT, KC_DOWN, KC_UP,      KC_RGHT     \
 ),
 
 /* Lower
@@ -495,6 +495,30 @@ void bs_taphandler (qk_tap_dance_state_t *state, void *user_data) {
   }
 }
 
+void wk_finished (qk_tap_dance_state_t *state, void *user_data) {
+  tap_state = cur_dance(state);
+  switch (tap_state) {
+    case SINGLE_TAP:
+      tap_code(KC_LGUI);
+      break;
+    case SINGLE_HOLD:
+      register_code(KC_LGUI);
+      break;
+    case DOUBLE_TAP:
+      tap_code(KC_APP);
+      break;
+  }
+}
+
+void wk_reset (qk_tap_dance_state_t *state, void *user_data) {
+  switch (tap_state) {
+    case SINGLE_HOLD:
+      unregister_code(KC_LGUI);
+      break;
+  }
+  tap_state = 0;
+}
+
 void hyperlead_finished (qk_tap_dance_state_t *state, void *user_data) {
   tap_state = cur_dance(state);
   switch (tap_state) {
@@ -520,11 +544,11 @@ qk_tap_dance_action_t tap_dance_actions[] = {
   [LSCD]     = ACTION_TAP_DANCE_FN_ADVANCED(NULL,ls_finished, ls_reset),
   [RSCD]     = ACTION_TAP_DANCE_FN_ADVANCED(NULL,rs_finished, rs_reset),
   [HPRLD]    = ACTION_TAP_DANCE_FN_ADVANCED(NULL,hyperlead_finished, hyperlead_reset),
+  [GUIMN]    = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, wk_finished, wk_reset, 250), 
   [BSPTD]    = ACTION_TAP_DANCE_FN_ADVANCED_TIME(bs_taphandler, NULL, NULL, 120), 
   [GRCL]     = ACTION_TAP_DANCE_DOUBLE(KC_GRV,  KC_CALCULATOR),
   [AUMENT]   = ACTION_TAP_DANCE_DOUBLE(KC_QUOT, KC_ENT),
   [OUMAST]   = ACTION_TAP_DANCE_DOUBLE(KC_SCLN, KC_BSLS),
   [DELPL]    = ACTION_TAP_DANCE_DOUBLE(KC_DEL,  KC_MINS),
   [ZABRC]    = ACTION_TAP_DANCE_DOUBLE(KC_Z,    KC_NUBS),
-  [GUIMN]    = ACTION_TAP_DANCE_DOUBLE(KC_LGUI, KC_APP),
 };
