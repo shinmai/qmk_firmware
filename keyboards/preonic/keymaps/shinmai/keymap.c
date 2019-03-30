@@ -4,6 +4,8 @@
 
 enum preonic_layers {
   _QWERTY,
+  _GUEST,
+  _GRAISE,
   _LOWER,
   _RAISE,
   _ADJUST,
@@ -13,7 +15,7 @@ enum preonic_layers {
 };
 
 enum preonic_keycodes {
-  QWERTY = SAFE_RANGE,
+  QWERTY = SAFE_RANGE, GUEST, 
   MUS1, SUPERT, HACKERT, HYPERT,
   ADJUST, TFLIP, UCLEAD,
   SHRUG, DSPRV
@@ -27,6 +29,7 @@ float leader_fdup[][2] = SONG(LEADER_FDUP);
 LEADER_EXTERNS();
 
 #define LSPRSE LT(_RAISE, KC_SPC)
+#define GRSE LT(_GRAISE, KC_RBRC)
 #define RSPLWR LT(_LOWER, KC_SPC)
 #define LFTSPR LT(_SUPER, KC_LEFT)
 #define HYPER MO(_HYPER)
@@ -206,6 +209,48 @@ TD(LSCD), TD(ZABRC),KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COM
  KC_LCTL, TD(HPRLD),KC_LALT,TD(GUIMN),LSPRSE,        KC_SPC,     RSPLWR,  KC_LEFT, KC_DOWN, KC_UP,      KC_RGHT     \
 ),
 
+/* Guest
+ * ,-----------------------------------------------------------------------------------.
+ * |   §  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  | Bksp |
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * | Tab  |   Q  |   W  |   E  |   R  |   T  |   Y  |   U  |   I  |   O  |   P  | Del  |
+ * |------+------+------+------+------+-------------+------+------+------+------+------|
+ * | CapsL|   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  |   '  |Enter |
+ * |------+------+------+------+------+------|------+------+------+------+------+------|
+ * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   -  |Shift |
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * | Ctrl |      | Alt  | GUI  |Umlaut|    Space    |AltGr | Left | Down |  Up  |Right |
+ * `-----------------------------------------------------------------------------------'
+ */
+[_GUEST] = LAYOUT_preonic_1x2uC( \
+  KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC, \
+  KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_DEL,  \
+  KC_CAPS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_BSLS, KC_ENT, \
+  KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,  \
+  KC_LCTL, KC_NO,   KC_LALT, KC_LGUI, GRSE,          KC_SPC,     KC_RALT, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT  \
+),
+
+/* GuestRaise
+ * ,-----------------------------------------------------------------------------------.
+ * |Leader|      |      |      |      |      |      |      |      |      |      |      |
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * |      |      |      |      |      |      |      |      |      |      |      |      |
+ * |------+------+------+------+------+-------------+------+------+------+------+------|
+ * |      |      |      |      |      |      |      |      |      |      |      |      |
+ * |------+------+------+------+------+------|------+------+------+------+------+------|
+ * |      |      |      |      |      |      |      |      |      |      |      |      |
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * |      |      |      |      |      |             |      |      |      |      |      |
+ * `-----------------------------------------------------------------------------------'
+ */
+[_GRAISE] = LAYOUT_preonic_1x2uC( \
+  KC_LEAD, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+  _______, _______, _______, _______, _______,      KC_SPC,      _______, _______, _______, _______, _______  \
+),
+
 /* Lower
  * ,-----------------------------------------------------------------------------------.
  * |      |      |      |      |      |      |      |      |      |      |      |      |
@@ -264,7 +309,7 @@ TD(LSCD), TD(ZABRC),KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COM
 [_ADJUST] = LAYOUT_preonic_1x2uC( \
   RESET,   UC_M_WC, _______, _______, _______, _______, _______, KC_P7,   KC_P8,   KC_P9,   KC_PAST, _______, \
   _______, _______, _______, _______, _______, _______, _______, KC_P4,   KC_P5,   KC_P6,   KC_PMNS, _______, \
-  _______, _______, _______, _______, _______, _______, _______, KC_P1,   KC_P2,   KC_P3,   KC_PPLS, _______, \
+  _______, _______, _______, _______, _______, GUEST,   _______, KC_P1,   KC_P2,   KC_P3,   KC_PPLS, _______, \
   _______, _______, _______, _______, ADJUST,  _______, _______, KC_P0,   KC_PDOT, KC_PSLS, KC_PENT, _______, \
   MUS1,    _______, _______, _______, _______,      KC_SPC,      _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY  \
 ),
@@ -343,6 +388,16 @@ uint32_t layer_state_set_user(uint32_t state) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
+    case QWERTY:
+      if (record->event.pressed)
+        set_single_persistent_default_layer(_QWERTY);
+      return false;
+      break;
+    case GUEST:
+      if (record->event.pressed)
+        set_single_persistent_default_layer(_GUEST);
+      return false;
+      break;
     case MUS1:
       if (record->event.pressed)
         PLAY_SONG(mushroom_sfx);
@@ -402,6 +457,10 @@ void matrix_scan_user(void) {
     } else 
     SEQ_TWO_KEYS(KC_S, KC_S) {
       SEND_STRING(SS_DOWN(X_LALT)SS_TAP(X_PSCREEN)SS_UP(X_LALT));
+      did_leader_succeed = true;
+    }
+    SEQ_FIVE_KEYS(KC_I, KC_D, KC_K, KC_F, KC_A) {
+      set_single_persistent_default_layer(_QWERTY);
       did_leader_succeed = true;
     }
     leader_end();

@@ -10,7 +10,7 @@
     MN(_C7), MN(_E7), MN(_G7), MN(_B7), MN(_G7), MN(_E7), MN(_C7), MN(_E7), MN(_G7), MN(_B7), MN(_G7), MN(_E7), MN(_REST), \
     MN(_D7), MN(_F7), MN(_A7), MN(_C8), MN(_A7), MN(_F7), MN(_D7), MN(_F7), MN(_A7), MN(_C8), MN(_A7), MN(_F7), MN(_D7), MN(_F7), MN(_A7), MN(_C8),
     #define STARTUP_SONG SONG(SHINMAI_JINLGE)
-    #define DEFAULT_LAYER_SONGS { SONG(QWERTY_SOUND) }
+    #define DEFAULT_LAYER_SONGS { SONG(QWERTY_SOUND), SONG(VICTORY_FANFARE_SHORT) }
     #define LEADER_CHIME SD_NOTE(_A6), S__NOTE(_REST), S__NOTE(_A7),
     #define LEADER_DONE S__NOTE(_G6), SD_NOTE(_REST), QD_NOTE(_A6),
     #define LEADER_FDUP S__NOTE(_A6), M__NOTE(_REST, 1), S__NOTE(_G6), M__NOTE(_REST, 1), S__NOTE(_F6), 
