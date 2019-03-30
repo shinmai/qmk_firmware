@@ -1,5 +1,7 @@
 # shinmai's Preonic layout - WIP and weird
 
+This keymap is laid out assuming a Finnish layout on the OS side, will be very weird to use on non-nordic layouts.
+
 ## TODO:
 - [x] obackspace - ctrlbSP
 - [x] numpad
