@@ -153,6 +153,10 @@ void qk_ucis_start_user(void) {
 void qk_ucis_symbol_fallback (void) {}
 #endif
 
+/*
+ * By drasha, kdb424 & Konstantin: https://github.com/qmk/qmk_firmware/pull/3828
+ * Good STR->HEX converter courtesy of bocaj: https://r12a.github.io/app-conversion/ 
+ */
 __attribute__((weak))
 void send_unicode_hex_string(const char* str) {
   if (!str) { return; } // Safety net
@@ -471,7 +475,11 @@ void leader_end(void) {
   }
 }
 
+/*
+ * both dance parser by DanielGGordon
+ */
 int cur_dance (qk_tap_dance_state_t *state) {
+  // Favors being held
   if (state->count == 1) {
     if (state->interrupted) {
       if (!state->pressed) return SINGLE_TAP;
@@ -490,6 +498,27 @@ int cur_dance (qk_tap_dance_state_t *state) {
     if (!state->pressed) return TRIPLE_TAP;
     else return TRIPLE_HOLD;
   }
+  else return 8;
+}
+
+int cur_dance_tap (qk_tap_dance_state_t *state) {
+  // Favors being tapped
+  if (state->count == 1) {
+    if (state->interrupted) {
+      return SINGLE_TAP;
+    }
+    else {
+      if (!state->pressed) return SINGLE_TAP;
+      else return SINGLE_HOLD;
+    }
+  }
+  else if (state->count == 2) {
+    if (state->interrupted) return DOUBLE_SINGLE_TAP;
+    else if (state->pressed) return DOUBLE_HOLD;
+    else return DOUBLE_TAP;
+  }
+  else if ((state->count == 3) && ((state->interrupted) || (!state->pressed))) return TRIPLE_TAP;
+  else if (state->count == 3) return TRIPLE_HOLD;
   else return 8;
 }
 
