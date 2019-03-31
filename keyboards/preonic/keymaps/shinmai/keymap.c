@@ -190,7 +190,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * | Tab  |   Q  |   W  |   E  |   R  |   T  |   Y  |   U  |   I  |   O  |   P  | Del+ |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * | Esc  |   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  | '  Ö |EnterÄ|
+ * | Esc  |   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  | '  Ö |   Ä  |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * |scadet|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   -  |scadet|
  * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -200,7 +200,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_QWERTY] = LAYOUT_preonic_1x2uC( \
 TD(GRCL),  TFLIP,   SHRUG,   DSPRV,   _______, _______, _______, _______, _______, _______, _______,    TD(BSPTD),  \
   KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,       TD(DELPL),  \
-  KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    TD(OUMAST), TD(AUMENT), \
+  KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    TD(OUMAST), KC_QUOT, \
 TD(LSCD), TD(ZABRC),KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,    TD(RSCD),   \
  KC_LCTL, TD(HPRLD),KC_LALT,TD(GUIMN),LSPRSE,        KC_SPC,     RSPLWR,  KC_LEFT, KC_DOWN, KC_UP,      KC_RGHT     \
 ),
@@ -529,9 +529,11 @@ void ls_finished (qk_tap_dance_state_t *state, void *user_data) {
   switch (tap_state) {
     case SINGLE_TAP: register_mods(MOD_BIT(KC_LSHIFT));register_code(KC_8); break;
     case SINGLE_HOLD: register_code(KC_LSHIFT); break;
+    case DOUBLE_HOLD:
     case DOUBLE_TAP: register_mods(MOD_BIT(KC_RALT));register_code(KC_7); break;
+    case TRIPLE_HOLD:
     case TRIPLE_TAP: register_mods(MOD_BIT(KC_RALT));register_code(KC_8); break;
-    case DOUBLE_SINGLE_TAP: register_mods(MOD_BIT(KC_LSHIFT));register_code(KC_8);unregister_code(KC_8);register_code(KC_8);
+    case DOUBLE_SINGLE_TAP: register_mods(MOD_BIT(KC_RALT));register_code(KC_7); break;
   }
 }
 
@@ -539,9 +541,11 @@ void ls_reset (qk_tap_dance_state_t *state, void *user_data) {
   switch (tap_state) {
     case SINGLE_TAP: unregister_code(KC_8);unregister_mods(MOD_BIT(KC_LSHIFT)); break;
     case SINGLE_HOLD: unregister_code(KC_LSHIFT); break;
+    case DOUBLE_HOLD:
     case DOUBLE_TAP: unregister_code(KC_7);unregister_mods(MOD_BIT(KC_RALT)); break;
+    case TRIPLE_HOLD:
     case TRIPLE_TAP: unregister_code(KC_8);unregister_mods(MOD_BIT(KC_RALT)); break;
-    case DOUBLE_SINGLE_TAP: unregister_code(KC_8);unregister_mods(MOD_BIT(KC_LSHIFT));
+    case DOUBLE_SINGLE_TAP: unregister_code(KC_7);unregister_mods(MOD_BIT(KC_RALT));
   }
   tap_state = 0;
 }
@@ -551,9 +555,11 @@ void rs_finished (qk_tap_dance_state_t *state, void *user_data) {
   switch (tap_state) {
     case SINGLE_TAP: register_mods(MOD_BIT(KC_LSHIFT));register_code(KC_9); break;
     case SINGLE_HOLD: register_code(KC_LSHIFT); break;
+    case DOUBLE_HOLD:
     case DOUBLE_TAP: register_mods(MOD_BIT(KC_RALT));register_code(KC_0); break;
+    case TRIPLE_HOLD:
     case TRIPLE_TAP: register_mods(MOD_BIT(KC_RALT));register_code(KC_9); break;
-    case DOUBLE_SINGLE_TAP: register_mods(MOD_BIT(KC_LSHIFT));register_code(KC_9);unregister_code(KC_9);register_code(KC_9);
+    case DOUBLE_SINGLE_TAP: register_mods(MOD_BIT(KC_RALT));register_code(KC_0); break;
   }
 }
 
@@ -561,9 +567,11 @@ void rs_reset (qk_tap_dance_state_t *state, void *user_data) {
   switch (tap_state) {
     case SINGLE_TAP: unregister_code(KC_9);unregister_mods(MOD_BIT(KC_LSHIFT)); break;
     case SINGLE_HOLD: unregister_code(KC_LSHIFT); break;
+    case DOUBLE_HOLD:
     case DOUBLE_TAP: unregister_code(KC_0);unregister_mods(MOD_BIT(KC_RALT)); break;
+    case TRIPLE_HOLD:
     case TRIPLE_TAP: unregister_code(KC_9);unregister_mods(MOD_BIT(KC_RALT)); break;
-    case DOUBLE_SINGLE_TAP: unregister_code(KC_9);unregister_mods(MOD_BIT(KC_LSHIFT));
+    case DOUBLE_SINGLE_TAP: unregister_code(KC_0);unregister_mods(MOD_BIT(KC_RALT));
   }
   tap_state = 0;
 }
@@ -621,13 +629,13 @@ void hyperlead_reset (qk_tap_dance_state_t *state, void *user_data) {
 }
 
 qk_tap_dance_action_t tap_dance_actions[] = {
-  [LSCD]     = ACTION_TAP_DANCE_FN_ADVANCED(NULL,ls_finished, ls_reset),
-  [RSCD]     = ACTION_TAP_DANCE_FN_ADVANCED(NULL,rs_finished, rs_reset),
+  [LSCD]     = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL,ls_finished, ls_reset, 185),
+  [RSCD]     = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL,rs_finished, rs_reset, 185),
   [HPRLD]    = ACTION_TAP_DANCE_FN_ADVANCED(NULL,hyperlead_finished, hyperlead_reset),
   [GUIMN]    = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, wk_finished, wk_reset, 250), 
   [BSPTD]    = ACTION_TAP_DANCE_FN_ADVANCED_TIME(bs_taphandler, NULL, NULL, 120), 
   [GRCL]     = ACTION_TAP_DANCE_DOUBLE(KC_GRV,  KC_CALCULATOR),
-  [AUMENT]   = ACTION_TAP_DANCE_DOUBLE(KC_QUOT, KC_ENT),
+//  [AUMENT]   = ACTION_TAP_DANCE_DOUBLE(KC_QUOT, KC_ENT),
   [OUMAST]   = ACTION_TAP_DANCE_DOUBLE(KC_SCLN, KC_BSLS),
   [DELPL]    = ACTION_TAP_DANCE_DOUBLE(KC_DEL,  KC_MINS),
   [ZABRC]    = ACTION_TAP_DANCE_DOUBLE(KC_Z,    KC_NUBS),
