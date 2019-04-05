@@ -64,6 +64,9 @@ void rs_finished (qk_tap_dance_state_t *state, void *user_data);
 void rs_reset (qk_tap_dance_state_t *state, void *user_data);
 void bs_taphandler (qk_tap_dance_state_t *state, void *user_data);
 
+const uint16_t PROGMEM test_combo[] = {KC_J, KC_K, COMBO_END};
+combo_t key_combos[COMBO_COUNT] = {COMBO(test_combo, KC_ENT)};
+
 void send_unicode_hex_string(const char* str);
 
 /* use X(n) to call the  */
