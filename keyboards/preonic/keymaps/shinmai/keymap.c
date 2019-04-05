@@ -304,8 +304,8 @@ TD(LSCD), TD(ZABRC),KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COM
  */
 [_ADJUST] = LAYOUT_preonic_1x2uC( \
   RESET,   UC_M_WC, _______, _______, _______, _______, _______, KC_P7,   KC_P8,   KC_P9,   KC_PAST, _______, \
-  _______, _______, _______, _______, _______, _______, _______, KC_P4,   KC_P5,   KC_P6,   KC_PMNS, _______, \
-  _______, _______, _______, _______, _______, GUEST,   _______, KC_P1,   KC_P2,   KC_P3,   KC_PPLS, _______, \
+  KC_BTN1, KC_MS_U, KC_BTN2, _______, _______, _______, _______, KC_P4,   KC_P5,   KC_P6,   KC_PMNS, _______, \
+  KC_MS_L, KC_MS_D, KC_MS_R, _______, _______, GUEST,   _______, KC_P1,   KC_P2,   KC_P3,   KC_PPLS, _______, \
   _______, _______, _______, _______, ADJUST,  _______, _______, KC_P0,   KC_PDOT, KC_PSLS, KC_PENT, _______, \
   _______, _______, _______, _______, _______,      KC_SPC,      _______, KC_MPLY, KC_VOLD, KC_VOLU, KC_MNXT  \
 ),
