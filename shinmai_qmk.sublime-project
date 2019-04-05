@@ -21,6 +21,12 @@
 		},
 		{
 			"path": "keyboards\\preonic\\keymaps\\shinmai"
+		},
+		{
+			"path": "keyboards\\planck\\rev6"
+		},
+		{
+			"path": "keyboards\\planck\\keymaps\\shinmai"
 		}
 	]
 }
