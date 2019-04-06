@@ -146,7 +146,7 @@ const qk_ucis_symbol_t ucis_symbol_table[] = UCIS_TABLE(
   ,UCIS_SYM("cry",  0x1F62D) // 😭
   ,UCIS_SYM("bang", 0x0203D) //  ‽
   ,UCIS_SYM("irony",0x02E2E) //  ⸮
-  ,UCIS_SYM("check", 0x2714) // ✔️
+  ,UCIS_SYM("check",0x02714) // ✔️
 );
 void qk_ucis_start_user(void) {
   unicode_input_start();
