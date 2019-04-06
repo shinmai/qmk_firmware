@@ -5,7 +5,8 @@
 extern keymap_config_t keymap_config;
 
 enum planck_layers {
-  _QWERTY = 0, _UCISB,
+  _QWERTY = 0,
+  _UCISB,
   _LOWER,
   _RAISE,
   _ADJUST,
