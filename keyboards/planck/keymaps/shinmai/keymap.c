@@ -22,7 +22,10 @@ enum planck_keycodes {
   TFLIP,
   UCLEAD,
   SHRUG,
-  DSPRV
+  DSPRV,
+  KAOMOJI_FACE,
+  KAOMOJI_ACTION,
+  KAOMOJI_ITEM,
 };
 
 bool did_leader_succeed;
@@ -165,12 +168,13 @@ void qk_ucis_cancel (void) {
 
 /*
  * By drasha, kdb424 & Konstantin: https://github.com/qmk/qmk_firmware/pull/3828
- * Good STR->HEX converter courtesy of bocaj: https://r12a.github.io/app-conversion/ 
+ * Good STR->HEX converter courtesy of bocaj: https://r12a.github.io/app-conversion/
+ * Modified by shinmai to return number of glyphs printed
  */
 __attribute__((weak))
-void send_unicode_hex_string(const char* str) {
-  if (!str) { return; } // Safety net
-
+int send_unicode_hex_string_mod(const char* str) {
+  if (!str) { return -1; } // Safety net
+  int num = 0;
   while (*str) {
     // Find the next code point (token) in the string
     for (; *str == ' '; str++);
@@ -189,8 +193,55 @@ void send_unicode_hex_string(const char* str) {
     send_string(code_point);
     unicode_input_finish();
 
+    num += 1;
     str += n; // Move to the first ' ' (or '\0') after the current token
   }
+  return num;
+}
+
+int kaomoji_list_position = 0;
+int last_printed_kaomoji_len = 0;
+int in_kaomoji_mode = 0;
+
+const char *PROGMEM kaomoji_faces[] = {
+  "0028 002A 0020 005E 0020 03C9 0020 005E 0029",
+  "0028 256F 2727 25BD 2727 0029 256F",
+  "0028 FF89 00B4 30EE 0060 0029 FF89",
+  NULL,
+};
+const char *PROGMEM kaomoji_actions[] = {
+  "2283 2501 708E 708E 708E 708E 708E",
+  "002F 007E 007E 2606 2019 002E FF65 002E FF65 003A 2605 2019 002E FF65 002E FF65 003A 2606",
+  "FF89 0020 2025 2026 2501 2501 2501 2605",
+  NULL,
+};
+const char *PROGMEM kaomoji_items[] = {
+  "256F 5F61 253B 2501 253B",
+  "30CE 0020 FF40 3001 30FD FF40 2602 30FD FF40 3001 30FD",
+  "00A4 003D 005B 005D 003A 003A 003A 003A 003A 003E",
+  NULL,
+};
+
+const char* get_kaomoji(int index) {
+  switch(in_kaomoji_mode) {
+    case 1:
+      return kaomoji_faces[index];
+      break;
+    case 2:
+      return kaomoji_actions[index];
+      break;
+    case 3:
+      return kaomoji_items[index];
+      break;
+    default:
+      return NULL;
+  }
+}
+
+void enter_kaomoji_mode(int mode) {
+  in_kaomoji_mode = mode;
+  kaomoji_list_position = 0;
+  last_printed_kaomoji_len = send_unicode_hex_string_mod(get_kaomoji(kaomoji_list_position));  
 }
 
 #define LSPRSE LT(_RAISE, KC_SPC)
@@ -365,11 +416,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_OMEGA] = LAYOUT_planck_2x2u(
     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+    _______, _______, _______, _______, KAOMOJI_FACE, KAOMOJI_ACTION, KAOMOJI_ITEM, _______, _______, _______, _______, _______,
     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
     _______, _______, _______, _______,      _______,         _______,      _______, _______, _______, _______
 ),
-
 
 };
 
@@ -383,7 +433,43 @@ uint32_t layer_state_set_user(uint32_t state) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  if(in_kaomoji_mode > 0) {
+    if (record->event.pressed)
+    switch (keycode) {
+      case KC_DOWN:
+        kaomoji_list_position++;
+        if(get_kaomoji(kaomoji_list_position) == NULL) kaomoji_list_position = 0;
+        for(int i=0;i<last_printed_kaomoji_len;i++) tap_code(KC_BSPC);
+        last_printed_kaomoji_len = send_unicode_hex_string_mod(get_kaomoji(kaomoji_list_position));
+        return false;
+        break;
+      case KC_ESC:
+        for(int i=0;i<last_printed_kaomoji_len;i++) tap_code(KC_BSPC);
+      case KC_ENT:
+        in_kaomoji_mode = 0;
+        return false;
+        break;
+    }
+  }
   switch (keycode) {
+    case KAOMOJI_FACE:
+      if (record->event.pressed) {
+        enter_kaomoji_mode(1);
+      }
+      return false;
+      break;
+    case KAOMOJI_ACTION:
+      if (record->event.pressed) {
+        enter_kaomoji_mode(2);
+      }
+      return false;
+      break;
+    case KAOMOJI_ITEM:
+      if (record->event.pressed) {
+        enter_kaomoji_mode(3);
+      }
+      return false;
+      break;
     case QWERTY:
       if (record->event.pressed)
         set_single_persistent_default_layer(_QWERTY);
