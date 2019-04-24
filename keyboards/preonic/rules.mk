@@ -72,5 +72,4 @@ API_SYSEX_ENABLE = no
 SLEEP_LED_ENABLE = no    # Breathing sleep LED during USB suspend
 
 LAYOUTS = ortho_5x12
-
 DEFAULT_FOLDER = preonic/rev3
