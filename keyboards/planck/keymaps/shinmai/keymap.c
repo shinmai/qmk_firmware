@@ -34,6 +34,7 @@ enum planck_keycodes {
   KAOMOJI_FACE,
   KAOMOJI_ACTION,
   KAOMOJI_ITEM,
+  M1, M2, M3,
 };
 
 bool did_leader_succeed;
@@ -267,6 +268,7 @@ void enter_kaomoji_mode(int mode) {
 #define KM_F KAOMOJI_FACE
 #define KM_A KAOMOJI_ACTION
 #define KM_I KAOMOJI_ITEM
+#define GREEK MO(_GREEK)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -285,7 +287,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
     KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    OEAST,   AE,
     LSHFT,   ZANGB,   KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, RSHFT,
-    KC_LCTL, HYPER,   KC_LALT, SUPER,       LSPRSE,           RSPLWR,       KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
+    KC_LCTL, HYPER,   KC_LALT, SUPER,       LSPRSE,           RSPLWR,       GREEK,   M1,      M2,      OSMAGR
 ),
 
 /* UCIS BASE
