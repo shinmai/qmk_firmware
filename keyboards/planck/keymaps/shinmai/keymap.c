@@ -264,6 +264,9 @@ void enter_kaomoji_mode(int mode) {
 #define OEAST TD(OUMAST)
 #define AE KC_QUOT
 #define OSMAGR OSM(MOD_RALT)
+#define KM_F KAOMOJI_FACE
+#define KM_A KAOMOJI_ACTION
+#define KM_I KAOMOJI_ITEM
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
