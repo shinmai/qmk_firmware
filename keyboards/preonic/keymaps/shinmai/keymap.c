@@ -385,6 +385,16 @@ uint32_t layer_state_set_user(uint32_t state) {
   return state;
 }
 
+void encoder_update_user(uint8_t index, bool clockwise) {
+  if(IS_LAYER_ON(_LOWER)) {
+    clockwise ? tap_code(KC_MS_WH_DOWN) : tap_code(KC_MS_WH_UP);
+  } else if(IS_LAYER_ON(_GREEK)) {
+    clockwise ? tap_code(KC_PGDN) : tap_code(KC_PGUP);
+  } else {
+    clockwise ? tap_code(KC_AUDIO_VOL_UP) : tap_code(KC_AUDIO_VOL_DOWN);
+  }
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case QWERTY:
