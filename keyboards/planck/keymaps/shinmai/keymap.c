@@ -34,7 +34,6 @@ enum planck_keycodes {
   KAOMOJI_FACE,
   KAOMOJI_ACTION,
   KAOMOJI_ITEM,
-  M1, M2, M3,
 };
 
 bool did_leader_succeed;
@@ -65,6 +64,9 @@ enum tapkeys {
   HPRLD,
   ZABRC,
   GUIMN,
+  GRKTD,
+  M1TD,
+  M2TD,
 };
 int cur_dance (qk_tap_dance_state_t *state);
 
@@ -74,8 +76,29 @@ void rs_finished (qk_tap_dance_state_t *state, void *user_data);
 void rs_reset (qk_tap_dance_state_t *state, void *user_data);
 void bs_taphandler (qk_tap_dance_state_t *state, void *user_data);
 
-const uint16_t PROGMEM test_combo[] = {KC_J, KC_K, COMBO_END};
-combo_t key_combos[COMBO_COUNT] = {COMBO(test_combo, KC_ENT)};
+#define M1 TD(M1TD)
+#define M2 TD(M2TD)
+
+enum combo_events {
+  JK_ENTER,
+  MM_F23
+};
+
+const uint16_t PROGMEM jkent_combo[] = {KC_J, KC_K, COMBO_END};
+const uint16_t PROGMEM m1m2_combo[] = {M1, M2, COMBO_END};
+combo_t key_combos[COMBO_COUNT] = {\
+  [JK_ENTER] = COMBO(jkent_combo, KC_ENT),\
+  [MM_F23] = COMBO_ACTION(m1m2_combo),\
+};
+
+bool cancel_next_macro_td;
+
+void process_combo_event(uint8_t combo_index, bool pressed) {
+  if(combo_index == MM_F23) {
+    tap_code(KC_F23);
+    cancel_next_macro_td = true;
+  }
+}
 
 void send_unicode_hex_string(const char* str);
 
@@ -268,7 +291,7 @@ void enter_kaomoji_mode(int mode) {
 #define KM_F KAOMOJI_FACE
 #define KM_A KAOMOJI_ACTION
 #define KM_I KAOMOJI_ITEM
-#define GREEK MO(_GREEK)
+#define GREEK TD(GRKTD)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -280,7 +303,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * |scadet|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   -  |scadet|
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Ctrl | Hyper| Alt  | GUI  |    SLower   |    SRaise   |Left  | Down |  Up  |Right |
+ * | Ctrl | Hyper| Alt  | GUI  |    SLower   |    SRaise   |Greek |  M1  |  M2  |AltGr |
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = LAYOUT_planck_2x2u(
@@ -744,11 +767,11 @@ int cur_dance_tap (qk_tap_dance_state_t *state) {
   else return 8;
 }
 
-static int tap_state;
+static int lstap_state, rstap_state, wktap_state, hltap_state, grtap_state;
 
 void ls_finished (qk_tap_dance_state_t *state, void *user_data) {
-  tap_state = cur_dance(state);
-  switch (tap_state) {
+  lstap_state = cur_dance(state);
+  switch (lstap_state) {
     case SINGLE_TAP: register_mods(MOD_BIT(KC_LSHIFT));register_code(KC_8); break;
     case SINGLE_HOLD: register_code(KC_LSHIFT); break;
     case DOUBLE_HOLD:
@@ -760,7 +783,7 @@ void ls_finished (qk_tap_dance_state_t *state, void *user_data) {
 }
 
 void ls_reset (qk_tap_dance_state_t *state, void *user_data) {
-  switch (tap_state) {
+  switch (lstap_state) {
     case SINGLE_TAP: unregister_code(KC_8);unregister_mods(MOD_BIT(KC_LSHIFT)); break;
     case SINGLE_HOLD: unregister_code(KC_LSHIFT); break;
     case DOUBLE_HOLD:
@@ -769,12 +792,12 @@ void ls_reset (qk_tap_dance_state_t *state, void *user_data) {
     case TRIPLE_TAP: unregister_code(KC_8);unregister_mods(MOD_BIT(KC_RALT)); break;
     case DOUBLE_SINGLE_TAP: unregister_code(KC_7);unregister_mods(MOD_BIT(KC_RALT));
   }
-  tap_state = 0;
+  lstap_state = 0;
 }
 
 void rs_finished (qk_tap_dance_state_t *state, void *user_data) {
-  tap_state = cur_dance(state);
-  switch (tap_state) {
+  rstap_state = cur_dance(state);
+  switch (rstap_state) {
     case SINGLE_TAP: register_mods(MOD_BIT(KC_LSHIFT));register_code(KC_9); break;
     case SINGLE_HOLD: register_code(KC_LSHIFT); break;
     case DOUBLE_HOLD:
@@ -786,7 +809,7 @@ void rs_finished (qk_tap_dance_state_t *state, void *user_data) {
 }
 
 void rs_reset (qk_tap_dance_state_t *state, void *user_data) {
-  switch (tap_state) {
+  switch (rstap_state) {
     case SINGLE_TAP: unregister_code(KC_9);unregister_mods(MOD_BIT(KC_LSHIFT)); break;
     case SINGLE_HOLD: unregister_code(KC_LSHIFT); break;
     case DOUBLE_HOLD:
@@ -795,7 +818,35 @@ void rs_reset (qk_tap_dance_state_t *state, void *user_data) {
     case TRIPLE_TAP: unregister_code(KC_9);unregister_mods(MOD_BIT(KC_RALT)); break;
     case DOUBLE_SINGLE_TAP: unregister_code(KC_0);unregister_mods(MOD_BIT(KC_RALT));
   }
-  tap_state = 0;
+  rstap_state = 0;
+}
+
+void m1tapdance (qk_tap_dance_state_t *state, void *user_data) {
+  if(cancel_next_macro_td) {
+    cancel_next_macro_td = false;
+    return;
+  }
+  switch (state->count) {
+    case 1: tap_code(KC_F13);break;
+    case 2: tap_code(KC_F14);break;
+    case 3: tap_code(KC_F15);break;
+    case 4: tap_code(KC_F16);break;
+    case 5: tap_code(KC_F17);break;
+  }
+}
+
+void m2tapdance (qk_tap_dance_state_t *state, void *user_data) {
+  if(cancel_next_macro_td) {
+    cancel_next_macro_td = false;
+    return;
+  }
+  switch (state->count) {
+    case 1: tap_code(KC_F18);break;
+    case 2: tap_code(KC_F19);break;
+    case 3: tap_code(KC_F20);break;
+    case 4: tap_code(KC_F21);break;
+    case 5: tap_code(KC_F22);break;
+  }
 }
 
 void bs_taphandler (qk_tap_dance_state_t *state, void *user_data) {
@@ -806,8 +857,8 @@ void bs_taphandler (qk_tap_dance_state_t *state, void *user_data) {
 }
 
 void wk_finished (qk_tap_dance_state_t *state, void *user_data) {
-  tap_state = cur_dance(state);
-  switch (tap_state) {
+  wktap_state = cur_dance(state);
+  switch (wktap_state) {
     case SINGLE_TAP:
       tap_code(KC_LGUI);
       break;
@@ -821,17 +872,17 @@ void wk_finished (qk_tap_dance_state_t *state, void *user_data) {
 }
 
 void wk_reset (qk_tap_dance_state_t *state, void *user_data) {
-  switch (tap_state) {
+  switch (wktap_state) {
     case SINGLE_HOLD:
       unregister_code(KC_LGUI);
       break;
   }
-  tap_state = 0;
+  wktap_state = 0;
 }
 
 void hyperlead_finished (qk_tap_dance_state_t *state, void *user_data) {
-  tap_state = cur_dance(state);
-  switch (tap_state) {
+  hltap_state = cur_dance(state);
+  switch (hltap_state) {
     case SINGLE_TAP:
       qk_leader_start();
       break;
@@ -842,18 +893,42 @@ void hyperlead_finished (qk_tap_dance_state_t *state, void *user_data) {
 }
 
 void hyperlead_reset (qk_tap_dance_state_t *state, void *user_data) {
-  switch (tap_state) {
+  switch (hltap_state) {
     case SINGLE_HOLD:
       layer_off(_HYPER);
       break;
   }
-  tap_state = 0;
+  hltap_state = 0;
+}
+
+void greek_finished (qk_tap_dance_state_t *state, void *user_data) {
+  grtap_state = cur_dance(state);
+  switch (grtap_state) {
+    case SINGLE_TAP:
+      tap_code(KC_F24);
+      break;
+    case SINGLE_HOLD:
+      layer_on(_GREEK);
+      break;
+  }
+}
+
+void greek_reset (qk_tap_dance_state_t *state, void *user_data) {
+  switch (grtap_state) {
+    case SINGLE_HOLD:
+      layer_off(_GREEK);
+      break;
+  }
+  grtap_state = 0;
 }
 
 qk_tap_dance_action_t tap_dance_actions[] = {
   [LSCD]     = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL,ls_finished, ls_reset, 185),
   [RSCD]     = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL,rs_finished, rs_reset, 185),
+  [M1TD]     = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, m1tapdance, NULL, 350),
+  [M2TD]     = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, m2tapdance, NULL, 350),
   [HPRLD]    = ACTION_TAP_DANCE_FN_ADVANCED(NULL,hyperlead_finished, hyperlead_reset),
+  [GRKTD]    = ACTION_TAP_DANCE_FN_ADVANCED(NULL,greek_finished, greek_reset),
   [GUIMN]    = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, wk_finished, wk_reset, 250), 
   [BSPTD]    = ACTION_TAP_DANCE_FN_ADVANCED_TIME(bs_taphandler, NULL, NULL, 120), 
   [GRCL]     = ACTION_TAP_DANCE_DOUBLE(KC_GRV,  KC_CALCULATOR),
