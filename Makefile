@@ -1,3 +1,4 @@
+MAKEFLAGS += --output-sync -j8
 ifndef VERBOSE
 .SILENT:
 endif
