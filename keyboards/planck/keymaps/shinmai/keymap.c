@@ -31,10 +31,12 @@ enum planck_keycodes {
   KAOMOJI_FACE,
   KAOMOJI_ACTION,
   KAOMOJI_ITEM,
+  NOPEBAD,
 };
 
 bool did_leader_succeed;
 float mushroom_sfx[][2] = SONG(MARIO_MUSHROOM);
+float error_clanger[][2] = SONG(ERROR_CLANGER);
 float leader_chime[][2] = SONG(LEADER_CHIME);
 float leader_done[][2] = SONG(LEADER_DONE);
 float leader_fdup[][2] = SONG(LEADER_FDUP);
@@ -275,7 +277,7 @@ void enter_kaomoji_mode(int mode) {
 
 #define LSPRSE LT(_RAISE, KC_SPC)
 #define GRSE LT(_GRAISE, KC_RBRC)
-#define RSPLWR LT(_LOWER, KC_SPC)
+#define RSPLWR LT(_LOWER, KC_BSPC) //KC_SPC)
 #define LFTSPR LT(_SUPER, KC_LEFT)
 #define HYPER TD(HPRLD)
 #define LSHFT TD(LSCD)
@@ -304,7 +306,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = LAYOUT_planck_2x2u(
-    KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
+    KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    NOPEBAD,//KC_DEL,
     KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    OEAST,   AE,
     LSHFT,   ZANGB,   KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, RSHFT,
     KC_LCTL, HYPER,   KC_LALT, SUPER,       LSPRSE,           RSPLWR,       GREEK,   M1,      M2,      OSMAGR
@@ -341,8 +343,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_LOWER] = LAYOUT_planck_2x2u(
     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_DEL,
-    _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   _______, _______, _______, _______, KC_ENT,
-    _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  _______, _______, _______, _______, KC_RALT,
+    _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   _______, _______, _______, KC_LBRC, KC_ENT,
+    _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  _______, _______, _______, _______, _______,
     _______, _______, _______, _______,      _______,         _______,      _______, _______, _______, _______
 ),
 
@@ -361,7 +363,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    TD(GRCL), KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,   KC_0,     KC_MINS,
     _______, KC_HOME, KC_PGDN, KC_PGUP, KC_END,  _______, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_EQL,  KC_RBRC,
     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-    _______, _______, KC_RALT, _______,      _______,         _______,      _______, _______, _______, _______
+    _______, _______, _______, _______,      _______,         _______,      _______, _______, _______, _______
 ),
 
 /* Adjust
@@ -376,10 +378,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_ADJUST] = LAYOUT_planck_2x2u(
-    RESET,   KC_BTN1, KC_MS_U, KC_BTN2, _______, _______, _______, _______, _______, _______, _______, _______,
-    _______, KC_MS_L, KC_MS_D, KC_MS_R, _______, _______, _______, _______, _______, _______, _______, KC_LBRC,
+    RESET,   KC_BTN1, KC_MS_U, KC_BTN2, KC_WH_U, _______, _______, _______, _______, _______, _______, _______,
+    _______, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_D, _______, KC_MPLY, KC_VOLD, KC_VOLU, KC_MNXT, _______, _______,
     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-    _______, _______, _______, _______,      _______,         _______,      _______, KC_VOLD, KC_VOLU, KC_MPLY
+    _______, _______, _______, _______,      _______,         _______,      _______, _______, _______, _______
 ),
 
 /* Hyper
@@ -607,6 +609,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         PLAY_SONG(mushroom_sfx);
       return false;
       break;
+    case NOPEBAD:
+      if(record->event.pressed)
+        PLAY_SONG(error_clanger);
+        return false;
+        break;
     case TFLIP:
       if (record->event.pressed)
         send_unicode_hex_string("0028 30CE 0CA0 75CA 0CA0 0029 30CE 5F61 253B 2501 253B");

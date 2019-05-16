@@ -6,6 +6,13 @@
     MN(_F7), MN(_A7), MN(_C8), MN(_A7), MN(_F7), MN(_A7), MN(_C8), MN(_A7), MN(_F7), MN(_A7), MN(_C8), MN(_A7), MN(_F7), MN(_A7), MN(_C8), MN(_A7), MN(_REST), \
     MN(_C7), MN(_E7), MN(_G7), MN(_B7), MN(_G7), MN(_E7), MN(_C7), MN(_E7), MN(_G7), MN(_B7), MN(_G7), MN(_E7), MN(_REST), \
     MN(_D7), MN(_F7), MN(_A7), MN(_C8), MN(_A7), MN(_F7), MN(_D7), MN(_F7), MN(_A7), MN(_C8), MN(_A7), MN(_F7), MN(_D7), MN(_F7), MN(_A7), MN(_C8),
+    #define ERROR_CLANGER \
+    MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), \
+    MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_REST), \
+    MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), \
+    MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_REST), \
+    MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), \
+    MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_A4), MN(_B8), MN(_REST),
     #define STARTUP_SONG SONG(SHINMAI_JINLGE)
     #define DEFAULT_LAYER_SONGS { SONG(QWERTY_SOUND), SONG(VICTORY_FANFARE_SHORT) }
     #define LEADER_CHIME SD_NOTE(_A6), S__NOTE(_REST), S__NOTE(_A7),
