@@ -382,10 +382,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_ADJUST] = LAYOUT_preonic_2x2u(
-    RESET, _______, _______, _______, _______, _______, _______, KC_P7,   KC_P8,   KC_P9,   KC_PAST, _______, \
-    _______, KC_BTN1, KC_MS_U, KC_BTN2, KC_WH_U, _______, _______, _______, _______, _______, _______, _______,
-    _______, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_D, _______, KC_MPLY, KC_VOLD, KC_VOLU, KC_MNXT, _______, _______,
-    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+    RESET,   KC_MPLY, KC_VOLD, KC_VOLU, KC_MNXT, _______, _______, KC_P7,   KC_P8,   KC_P9,   KC_PAST, _______, \
+    _______, KC_BTN1, KC_MS_U, KC_BTN2, KC_WH_U, _______, _______, KC_P4,   KC_P5,   KC_P6,   KC_PMNS, _______,
+    _______, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_D, _______, _______, KC_P1,   KC_P2,   KC_P3,   KC_PPLS, _______,
+    _______, _______, _______, _______, _______, _______, _______, KC_P0,   KC_PDOT, KC_PSLS, KC_PENT, _______,
     _______, _______, _______, _______,      _______,         _______,      _______, _______, _______, _______
 ),
 
@@ -562,7 +562,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 };
 
-
 uint32_t layer_state_set_user(uint32_t state) {
   state = update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
   state = update_tri_layer_state(state, _HYPER, _RAISE, _SUPER);
@@ -573,6 +572,16 @@ uint32_t layer_state_set_user(uint32_t state) {
   state = update_tri_layer_state(state, _SUPER, _GREEK, _THETA);
   state = update_tri_layer_state(state, _HACKER, _GREEK, _GAMMA);
   return state;
+}
+
+void encoder_update_user(uint8_t index, bool clockwise) {
+  if(IS_LAYER_ON(_LOWER)) {
+    clockwise ? tap_code(KC_MS_WH_DOWN) : tap_code(KC_MS_WH_UP);
+  } else if(IS_LAYER_ON(_GREEK)) {
+    clockwise ? tap_code(KC_PGDN) : tap_code(KC_PGUP);
+  } else {
+    clockwise ? tap_code(KC_AUDIO_VOL_UP) : tap_code(KC_AUDIO_VOL_DOWN);
+  }
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
