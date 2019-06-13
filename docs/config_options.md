@@ -83,7 +83,7 @@ This is a C header file that is one of the first things included, and will persi
   * enables backlight breathing (only works with backlight pins B5, B6 and B7)
 * `#define BREATHING_PERIOD 6`
   * the length of one backlight "breath" in seconds
-* `#define DEBOUNCING_DELAY 5`
+* `#define DEBOUNCE 5`
   * the delay when reading the value of the pin (5 is default)
 * `#define LOCKING_SUPPORT_ENABLE`
   * mechanical locking support. Use KC_LCAP, KC_LNUM or KC_LSCR instead in keymap
@@ -171,6 +171,8 @@ If you define these options you will enable the associated feature, which may in
   * how long for the Combo keys to be detected. Defaults to `TAPPING_TERM` if not defined.
 * `#define TAP_CODE_DELAY 100`
   * Sets the delay between `register_code` and `unregister_code`, if you're having issues with it registering properly (common on VUSB boards). The value is in milliseconds.
+* `#define TAP_HOLD_CAPS_DELAY 200`
+  * Sets the delay for Tap Hold keys (`LT`, `MT`) when using `KC_CAPSLOCK` keycode, as this has some special handling on MacOS.  The value is in milliseconds, and defaults to 200ms if not defined. 
 
 ## RGB Light Configuration
 
