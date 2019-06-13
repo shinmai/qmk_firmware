@@ -32,6 +32,7 @@ enum planck_keycodes {
   KAOMOJI_ACTION,
   KAOMOJI_ITEM,
   NOPEBAD,
+  TABFW, TABBK,
 };
 
 bool did_leader_succeed;
@@ -396,7 +397,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_HYPER] = LAYOUT_planck_2x2u(                            
-    MUS1,    UCLEAD,  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+    MUS1,    UCLEAD,  _______, _______, _______, _______, _______, _______, _______, _______, TABBK,  TABFW,
     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
     _______, _______, _______, _______,      _______,         _______,      _______, _______, _______, _______
@@ -561,7 +562,35 @@ uint32_t layer_state_set_user(uint32_t state) {
   return state;
 }
 
+static bool tabbing = false;
+static uint16_t tabtimer;
+#define TABBING_TIMER 2500
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  if(record->event.pressed) {
+    if (keycode == TABFW || keycode == TABBK) {
+      tabtimer = timer_read();
+      if(!tabbing) {
+        register_code(KC_LALT);
+        tabbing = true;
+      }
+      if(keycode == TABBK) register_code(KC_LSHIFT);
+      tap_code(KC_TAB);
+      if(keycode == TABBK) unregister_code(KC_LSHIFT);
+      return false;
+    } else {
+      if(tabbing) {
+        unregister_code(KC_LALT);
+        tabbing = false;
+      }
+    }
+  } else {
+    if(tabbing) {
+      if(keycode == HYPER) {
+        unregister_code(KC_LALT);
+        tabbing = false;
+      }
+    }
+  }
   if(in_kaomoji_mode > 0) {
     if (record->event.pressed)
     switch (keycode) {
@@ -652,6 +681,11 @@ void matrix_scan_user(void) {
     }
     leader_end();
   }
+  if(tabbing)
+    if (timer_elapsed(tabtimer) > TABBING_TIMER) {
+      unregister_code(KC_LALT);
+      tabbing = false; 
+    }
 }
 
 void leader_start(void) {
