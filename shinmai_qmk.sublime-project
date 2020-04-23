@@ -1,0 +1,32 @@
+{
+	"folders":
+	[
+		{
+			"path": "tmk_core"
+		},
+		{
+			"path": "quantum"
+		},
+		{
+			"path": "lib"
+		},
+		{
+			"path": "drivers"
+		},
+		{
+			"path": "users\\shinmai"
+		},
+		{
+			"path": "keyboards\\preonic\\rev3"
+		},
+		{
+			"path": "keyboards\\preonic\\keymaps\\shinmai"
+		},
+		{
+			"path": "keyboards\\planck\\rev6"
+		},
+		{
+			"path": "keyboards\\planck\\keymaps\\shinmai"
+		}
+	]
+}
