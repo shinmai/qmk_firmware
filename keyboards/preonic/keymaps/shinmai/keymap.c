@@ -98,7 +98,7 @@ combo_t key_combos[COMBO_COUNT] = {\
 
 bool cancel_next_macro_td;
 
-void process_combo_event(uint8_t combo_index, bool pressed) {
+void process_combo_event(uint16_t combo_index, bool pressed) {
   if(combo_index == MM_F23) {
     tap_code(KC_F23);
     cancel_next_macro_td = true;
